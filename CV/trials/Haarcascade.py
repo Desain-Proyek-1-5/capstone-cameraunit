@@ -1,5 +1,5 @@
 import cv2
-
+#joric ope
 # Reading the Image
 image = cv2.imread('pedestrian1.jpg')
 
@@ -26,5 +26,5 @@ for (x, y, w, h) in bodies:
 # Showing the output Image
 cv2.imshow("Image", image)
 cv2.waitKey(0)
-   
+
 cv2.destroyAllWindows()
