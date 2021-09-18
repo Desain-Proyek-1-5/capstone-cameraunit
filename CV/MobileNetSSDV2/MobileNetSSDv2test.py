@@ -7,7 +7,8 @@ tensorflowNet = cv2.dnn.readNetFromTensorflow('ssd_mobilenet_v2_coco_2018_03_29.
 # Input image
 img = cv2.imread('../trials/kelasft1.jpg')
 rows, cols, channels = img.shape
- 
+classes = open('coco.names').read().strip().split('\n')
+print(classes)
 # Use the given image as input, which needs to be blob(s).
 tensorflowNet.setInput(cv2.dnn.blobFromImage(img, size=(320, 320), swapRB=True, crop=False))
  
@@ -35,6 +36,7 @@ for detection in networkOutput[0,0]:
  
         #draw a red rectangle around detected objects
         cv2.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
+        cv2.putText(img,"confidence:"+str(round(score,3)),(int(left),int(top)),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1)
  
 # Show the image with a rectagle surrounding the detected objects 
 cv2.imshow('Image', img)
