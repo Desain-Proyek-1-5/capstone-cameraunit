@@ -1,10 +1,33 @@
+##https://www.youtube.com/watch?v=cdblJqEUDNo
+##USAGE
+## yolov3example.py -a 1 -c 0.5 -i ../trials/pltsft.jpg
+
 # YOLO object detection
 import cv2 as cv
 import numpy as np
 import time
+import argparse
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('-a','--algorithm', type=int , metavar='', required=True, help='Algoritma yang akan digunakan')
+parser.add_argument('-c', '--confidence', type=float, metavar='', required=True, help='Nilai confidence yang digunakan')
+parser.add_argument("-i", "--image", required=True, default="D:\Kuliah\Senester 7\Despro 2\Belajar/python_snake.jpg",
+    help="path to input image")
+args = parser.parse_args()
+
+treshold = args.confidence
+
+algorithm = args.algorithm
+
+if algorithm == 1 :
+    algorithm_cfg = 'yolov3.cfg'
+    algorithm_weight = 'yolov3.weights'
+elif algorithm == 2 :
+    algorithm_cfg = 'yolov3-tiny.cfg'
+    algorithm_weight = 'yolov3-tiny.weights'
 
 def main():
-    img = cv.imread('../trials/pedestrian1.jpg')
+    img = cv.imread(args.image)
     cv.imshow('window',  img)
     cv.waitKey(1)
 
@@ -14,7 +37,7 @@ def main():
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype='uint8')
 
     # Give the configuration and weight files for the model and load the network.
-    net = cv.dnn.readNetFromDarknet('yolov3-tiny.cfg', 'yolov3-tiny.weights')
+    net = cv.dnn.readNetFromDarknet(algorithm_cfg, algorithm_weight)
     net.setPreferableBackend(cv.dnn.DNN_BACKEND_OPENCV)
     # net.setPreferableTarget(cv.dnn.DNN_TARGET_CPU)
 
@@ -70,7 +93,7 @@ def main():
             scores = detection[5:]
             classID = np.argmax(scores)
             confidence = scores[classID]
-            if confidence > 0.5:
+            if confidence > treshold:
                 box = detection[:4] * np.array([w, h, w, h])
                 (centerX, centerY, width, height) = box.astype("int")
                 x = int(centerX - (width / 2))
@@ -80,7 +103,7 @@ def main():
                 confidences.append(float(confidence))
                 classIDs.append(classID)
 
-    indices = cv.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
+    indices = cv.dnn.NMSBoxes(boxes, confidences, treshold, 0.4)
     if len(indices) > 0:
         for i in indices.flatten():
             (x, y) = (boxes[i][0], boxes[i][1])

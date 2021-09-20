@@ -1,11 +1,25 @@
+##https://www.youtube.com/watch?v=cdblJqEUDNo
+##USAGE
+## MobileNetSSDv2test.py -c -i..
+
 import cv2
 import time
 import numpy as np
+import argparse
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('-c', '--confidence', type=float, metavar='', required=True, help='Nilai confidence yang digunakan')
+parser.add_argument("-i", "--image", required=True, default="D:\Kuliah\Senester 7\Despro 2\Belajar/python_snake.jpg",
+    help="path to input image")
+args = parser.parse_args()
+
+treshold = args.confidence
+
 # Load a model imported from Tensorflow
 tensorflowNet = cv2.dnn.readNetFromTensorflow('ssd_mobilenet_v2_coco_2018_03_29.pb', 'ssd_mobilenet_v2_coco_2018_03_29.pbtxt')
  
 # Input image
-img = cv2.imread('../trials/kelasft1.jpg')
+img = cv2.imread(args.image)
 rows, cols, channels = img.shape
 classes = open('coco.names').read().strip().split('\n')
 print(classes)
@@ -27,7 +41,7 @@ print(networkOutput[0].shape)
 for detection in networkOutput[0,0]:
     
     score = float(detection[2])
-    if score > 0.2 and int(detection[1])==1:
+    if score > treshold and int(detection[1])==1:
      
         left = detection[3] * cols
         top = detection[4] * rows
