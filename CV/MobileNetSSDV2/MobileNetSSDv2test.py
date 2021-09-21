@@ -8,8 +8,8 @@ import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('-c', '--confidence', type=float, metavar='', required=True, help='Nilai confidence yang digunakan')
-parser.add_argument("-i", "--image", required=True, default="D:\Kuliah\Senester 7\Despro 2\Belajar/python_snake.jpg",
+parser.add_argument('-c', '--confidence', type=float, metavar='', required=True, help='Nilai confidence yang digunakan',default=0.3)
+parser.add_argument("-i", "--image", required=True, default="D:code\capstone-cameraunit\trials\pltsft.jpg",
     help="path to input image")
 args = parser.parse_args()
 
@@ -37,6 +37,8 @@ print(networkOutput.shape)
 print(networkOutput[0].shape)
 print("tesshape")
 print(networkOutput[0].shape)
+boxes=[]
+confidences=[]
 # Loop on the outputs
 for detection in networkOutput[0,0]:
     
@@ -47,11 +49,23 @@ for detection in networkOutput[0,0]:
         top = detection[4] * rows
         right = detection[5] * cols
         bottom = detection[6] * rows
- 
+        box = [int(left),int(top),int(right-left),int(bottom-top)]
+        boxes.append(box)
+        confidences.append(float(round(score,3)))
         #draw a red rectangle around detected objects
-        cv2.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
-        cv2.putText(img,"confidence:"+str(round(score,3)),(int(left),int(top)),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1)
- 
+        #cv2.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
+        #cv2.putText(img,"confidence:"+str(round(score,3)),(int(left),int(top)),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1)
+indices = cv2.dnn.NMSBoxes(boxes,confidences,treshold,0.7)
+print(len(confidences))
+print(len(indices))
+if len(indices) > 0:
+        for i in indices.flatten():
+            (x, y) = (boxes[i][0], boxes[i][1])
+            (w, h) = (boxes[i][2], boxes[i][3])
+            print(w,h)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0,0,255), 2)
+            text = "Conf:"+str(round(confidences[i],3))
+            cv2.putText(img, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (139,0,0), 1)
 # Show the image with a rectagle surrounding the detected objects 
 cv2.imshow('Image', img)
 cv2.waitKey()

@@ -1,6 +1,6 @@
 ##https://www.youtube.com/watch?v=cdblJqEUDNo
 ##USAGE
-## yolov3example.py -a 1 -c 0.5 -i ../trials/pltsft.jpg
+#yolov3example.py -a 1 -c 0.5 -i ../trials/pltsft.jpg
 
 # YOLO object detection
 import cv2 as cv
@@ -103,7 +103,8 @@ def main():
                 confidences.append(float(confidence))
                 classIDs.append(classID)
 
-    indices = cv.dnn.NMSBoxes(boxes, confidences, treshold, 0.4)
+    indices = cv.dnn.NMSBoxes(boxes, confidences, treshold, 0.5)
+    print("detections:",len(confidences))
     if len(indices) > 0:
         for i in indices.flatten():
             (x, y) = (boxes[i][0], boxes[i][1])
