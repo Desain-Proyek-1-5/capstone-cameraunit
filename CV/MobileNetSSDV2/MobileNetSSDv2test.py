@@ -55,6 +55,7 @@ for detection in networkOutput[0,0]:
         #draw a red rectangle around detected objects
         #cv2.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
         #cv2.putText(img,"confidence:"+str(round(score,3)),(int(left),int(top)),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1)
+        
 indices = cv2.dnn.NMSBoxes(boxes,confidences,treshold,0.7)
 print(len(confidences))
 print(len(indices))
