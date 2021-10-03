@@ -58,15 +58,31 @@ for detection in networkOutput[0,0]:
         
 indices = cv2.dnn.NMSBoxes(boxes,confidences,treshold,0.7)
 print(len(confidences))
+print("indices",indices)
 print(len(indices))
+
+def centroid(boxes, indices):
+    center=np.zeros((len(indices),2),dtype=int)
+    i=0
+    for index in indices.flatten():
+        x= boxes[index][0]+0.5*boxes[index][2]
+        y= boxes[index][1]+0.5*boxes[index][3]
+        center[i]=[int(x),int(y)]
+        i+=1
+    return center
+centre=centroid(boxes,indices)
+print(centre)
 if len(indices) > 0:
+        i1=0
         for i in indices.flatten():
             (x, y) = (boxes[i][0], boxes[i][1])
             (w, h) = (boxes[i][2], boxes[i][3])
             print(w,h)
             cv2.rectangle(img, (x, y), (x + w, y + h), (0,0,255), 2)
+            cv2.circle(img,tuple(centre[i1]),3,(0,255,0),2 )
             text = "Conf:"+str(round(confidences[i],3))
             cv2.putText(img, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (139,0,0), 1)
+            i1+=1
 # Show the image with a rectagle surrounding the detected objects 
 cv2.imshow('Image', img)
 cv2.waitKey()
