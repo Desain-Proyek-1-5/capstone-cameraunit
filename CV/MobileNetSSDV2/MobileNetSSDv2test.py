@@ -61,6 +61,8 @@ print(len(confidences))
 print("indices",indices)
 print(len(indices))
 
+# fungsi centroid return array of arrays koordinat titik tengah dari box
+#e.g [[x,y],[x,y],[x,y]]
 def centroid(boxes, indices):
     center=np.zeros((len(indices),2),dtype=int)
     i=0
@@ -70,8 +72,23 @@ def centroid(boxes, indices):
         center[i]=[int(x),int(y)]
         i+=1
     return center
+# fungsi distance generate distance matrix tapi dalam float
+# eg dist[1][2] isinya jarak antara titik 1 dan 2, dist[1][3] jarak antar 1 sama 3 dst
+def distance(center, indices):
+    length=len(indices)
+    dist = np.zeros((length,length))
+    for i in range(length):
+        dist[i]=(((center[i]-center)**2).sum(axis=1))**0.5
+    return dist
+
+def violations():
+    raise Exception("Not implemented yet")
 centre=centroid(boxes,indices)
+print("center")
 print(centre)
+print("distance")
+dist=distance(centre,indices)
+print(dist)
 if len(indices) > 0:
         i1=0
         for i in indices.flatten():
