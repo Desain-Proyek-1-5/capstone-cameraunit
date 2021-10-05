@@ -57,7 +57,7 @@ for detection in networkOutput[0,0]:
         #cv2.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
         #cv2.putText(img,"confidence:"+str(round(score,3)),(int(left),int(top)),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1)
 # extract indices of interest
-indices = cv2.dnn.NMSBoxes(boxes,confidences,treshold,0.7)
+indices = cv2.dnn.NMSBoxes(boxes,confidences,treshold,0.3)
 print(len(confidences))
 print("indices",indices)
 print(len(indices))
@@ -123,7 +123,7 @@ def violations(img, boxes, indices, confidences, distance, alpha, color1, color2
     detected = 0
     avgwidth = 0
     index = indices.flatten()
-    flag = np.zeros(length)
+    flag = np.zeros(max(index)+1)
     # iterate through detections
     for i in index:
         (x, y) = (boxes[i][0], boxes[i][1])
