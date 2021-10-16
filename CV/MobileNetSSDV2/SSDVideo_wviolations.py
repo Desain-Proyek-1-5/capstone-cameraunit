@@ -90,7 +90,7 @@ def violations(img, boxes, indices, confidences, distance, alpha, color1, color2
         i0+=1
     return detected
 #===========================================================================================
-
+exclude = 0.5
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('-c', '--confidence', type=float, metavar='', required=True, help='Nilai confidence yang digunakan',default=0.3)
 args = parser.parse_args()
@@ -137,8 +137,9 @@ while True:
             right = detection[5] * cols
             bottom = detection[6] * rows
             box = [int(left),int(top),int(right-left),int(bottom-top)]
-            boxes.append(box)
-            confidences.append(float(round(score,3)))
+            if(detection[3]>exclude):
+                boxes.append(box)
+                confidences.append(float(round(score,3)))
  
             #draw a red rectangle around detected objects
             #cv2.rectangle(frame, (int(left), int(top)), (int(right), int(bottom)), (0, 0, 255), thickness=2)
