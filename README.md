@@ -5,7 +5,11 @@ Automatic Social Distancing and Mask detection using Machine Learning
 ```
 pip install paho-mqtt
 ```
-
+### 2. Python dependencies for CV
+Required libraries: numpy, opencv-python, imutils (optional)
+```
+pip install -r /yourmessyfolders/to/cv/requirements.txt
+```
 ### 2. Mosquitto MQTT broker for windows
 https://mosquitto.org/
 
