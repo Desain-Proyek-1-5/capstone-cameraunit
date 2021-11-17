@@ -23,6 +23,10 @@ Contents: Machine Learning Algorithms
 ### 4. Main Folder
 Main Algorithm 
 
+### Models
+Darknet Yolov3 416:
+https://pjreddie.com/darknet/yolo/
+
 # Writing Rules
 Refer into PEP8(https://www.python.org/dev/peps/pep-0008/) Python writing guide, some simple rules that must be implemented:
 ## 1. Use lowercase letters for function and variables, delimited with underscore (snake_case).
